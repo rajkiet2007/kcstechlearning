@@ -10,7 +10,8 @@ from chatbot.zero_gemini_chatbot import ZeroChatBot
 from chatbot.wheather_function_chatboat import WheatherFunctionChatbot
 from tool.finance_chatbot import FinanceChatbot
 from tool.multitools import MultiTools
-
+from rag.index_pdf import IndexPDF
+from rag.query_rag import QueryRAG
 
 def chat():
     
@@ -123,7 +124,22 @@ def multi_tools():
             break
         result = multi_tool.call_tool(prompt=user_input)
         print(f"Final Result: {result}") 
-
+def execute_rag():
+    INDEX_FILE = "index.faiss"
+    index_pdf=IndexPDF()
+    query_rag=QueryRAG()
+    if not os.path.exists(INDEX_FILE):
+        pdf_path = os.path.join(os.path.dirname(__file__), "asset", "Python_Functions.pdf")
+        index_pdf.create_index(pdf_path)
+    else:
+        print("⚡ Index already exists. Skipping indexing.")  
+    while True:
+        user_input=input("You:")   
+        if user_input.lower() in ["exit", "quit"]:
+            print("Exiting chat. Goodbye!")
+            break  
+        result=query_rag.generate_answer(query=user_input)
+        print(f"Final Result: {result}") 
 if __name__ == "__main__":   
         # chat()
         # text_generation()
@@ -136,5 +152,5 @@ if __name__ == "__main__":
         # get_employee_salary()
         get_salary_by_query()
         # multi_tools()
-
+        # execute_rag()
 
