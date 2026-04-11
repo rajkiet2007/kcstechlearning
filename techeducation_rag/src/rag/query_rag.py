@@ -4,18 +4,18 @@ import numpy as np
 from sentence_transformers import SentenceTransformer
 from openai import OpenAI
 from dotenv import load_dotenv
-load_dotenv()
+from rag.ask_llm import AskLLM
 # Load model
 model = SentenceTransformer('all-MiniLM-L6-v2')
 
 # Load FAISS index
-
-
+# ask_llm = AskLLM("gemini", "gemini")
+ask_llm = AskLLM("openai", "openai")
+model_name = ask_llm.get_model_name()
 # Load chunks
 
 
-# OpenAI client
-client = OpenAI()
+client = ask_llm.get_client()
 
 class QueryRAG:
     # Retrieve relevant chunks
@@ -43,9 +43,12 @@ class QueryRAG:
         {query}
         """
 
-        response = client.responses.create(
-            model="gpt-5",
-            input=prompt
+        response = client.chat.completions.create(
+            model=model_name,
+            messages=[
+                {"role": "system", "content": "You are a helpful assistant that answers questions based on the provided context."},
+                {"role": "user", "content": prompt}
+            ]
         )
 
-        return response.output_text
+        return response.choices[0].message.content

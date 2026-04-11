@@ -6,6 +6,7 @@ import numpy as np
 from sentence_transformers import SentenceTransformer
 
 INDEX_FILE = "index.faiss"
+INDEX_FILE1 = "index1.faiss"
 CHUNKS_FILE = "chunks.pkl"
 
 model = SentenceTransformer('all-MiniLM-L6-v2')
@@ -39,7 +40,7 @@ class IndexPDF:
         index = faiss.IndexFlatL2(dimension)
         index.add(np.array(embeddings))
 
-        faiss.write_index(index, INDEX_FILE)
+        faiss.write_index(index, INDEX_FILE1)
 
         with open(CHUNKS_FILE, "wb") as f:
             pickle.dump(chunks, f)
