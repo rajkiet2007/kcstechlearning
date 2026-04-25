@@ -21,6 +21,15 @@ class Model:
                 )
             # Make sure the env var is available for the underlying library
             os.environ["GEMINI_API_KEY"] = api_key
-            return ChatGoogleGenerativeAI(model="gemini-3-flash-preview", temperature=0.7)
+            # Allow configuring the exact model resource name via environment variable.
+            # The Google GenAI API expects model names in resource format such as
+            # "models/chat-bison-001" or "models/gemini-2.5-flash". Set GEMINI_MODEL
+            # (or GOOGLE_MODEL) in your environment to the correct model identifier.
+            model_name = (
+                 os.getenv("GEMINI_MODEL") or os.getenv("GOOGLE_MODEL") or "gemini-2.5-flash"
+                # os.getenv("GEMINI_MODEL") or os.getenv("GOOGLE_MODEL") or "gemini-2.0-flash"
+            )
+            # return ChatGoogleGenerativeAI(model=model_name, temperature=0.7,streaming=True  )
+            return ChatGoogleGenerativeAI(model=model_name, temperature=0 )
         else:
-            raise ValueError(f"Model {self.name} not supported.")
+            raise ValueError(f"Model {name} not supported.")

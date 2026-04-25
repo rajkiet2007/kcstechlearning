@@ -4,17 +4,20 @@ class Tools:
         self.tools = {}
 
     @tool("web_search", description="Search the web for information.")  # Custom name
+    @staticmethod
     def search(query: str) -> str:
         """Search the web for information."""
         # return f"Results for: {query}"
         return "Current temperature in the city is 25°C with clear skies."
 
     @tool("get_city_weather", description="Get the current weather information for a specified city.")
+    @staticmethod
     def get_city_wheather(city: str) -> str:
         # Implement your logic to get weather information for the specified city
         return f"The current weather in {city} is sunny with a temperature of 25°C."
 
     @tool("suggest_clothing", description="Suggest appropriate clothing based on the weather.")
+    @staticmethod
     def suggest_clothing(weather: str) -> str:
         # Implement your logic to suggest clothing based on the weather
         if "sunny" in weather:
@@ -23,5 +26,13 @@ class Tools:
             return "It's rainy outside. You should consider wearing a raincoat and carrying an umbrella."
         else:
             return "The weather is moderate. Dress comfortably and check for updates later."
+    @tool("calculator", description="Evaluate a math expression.")
+    @staticmethod  
+    def calculator(expression: str) -> str:
+        """Evaluate a math expression."""
+        try:
+            return str(eval(expression))
+        except Exception:
+            return "Invalid expression"
         
     
